@@ -1,23 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import Search from "./Search/Search";
+import { SearchContext, MovieContext } from "./context/context";
+import "./App.css";
+
+let OMDB_API = "85a09168";
 
 function App() {
+  const [searchValue, setSearchValue] = useState("");
+  const [movieArray, setMovieArray] = useState([]);
+
+  async function handleOnChange(value) {
+    setSearchValue(value);
+
+    const response = await fetch(
+      `http://www.omdbapi.com/?apikey=${OMDB_API}&s=${searchValue}`
+    );
+
+    const data = await response.json();
+    console.log(data);
+    setMovieArray(data.Search || []);
+  }
+
+  const searchContextValueObj = {
+    movieSearchTitle: searchValue,
+    handleOnChange,
+    OMDB_API,
+    movieArray,
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ textAlign: "center" }}>
+      <SearchContext.Provider value={searchContextValueObj}>
+        <Search />
+      </SearchContext.Provider>
     </div>
   );
 }
