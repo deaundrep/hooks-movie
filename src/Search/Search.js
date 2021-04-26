@@ -6,7 +6,7 @@ const Search = () => {
   // let fromAppComponent = useContext(SearchContext);
   // console.log(fromAppComponent);
 
-  const { handleOnChange, movieSearchTitle } = useContext(SearchContext);
+  const { handleOnChange, movieSearchTitle, isSearching } = useContext(SearchContext);
 
   return (
     <div>
